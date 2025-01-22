@@ -12,6 +12,7 @@ import android.widget.TextView
 class MainActivity : AppCompatActivity() {
     var currentPlayer = "X"
     var gameBoard = Array(3) { Array(3) { "" } }
+    val winMessage: TextView = findViewById(R.id.winMessage)
 
     val position1: Button = findViewById(R.id.button00)
     val position2: Button = findViewById(R.id.button01)
@@ -76,5 +77,10 @@ class MainActivity : AppCompatActivity() {
         return ""
     }
 
+    private fun winMessage(winChar: String) {
+        if (winChar === "X") winMessage.text = "Player X win!"
+        else if (winChar === "O") winMessage.text = "Player O win!"
+        else winMessage.text = "It's a tie!"
+    }
 
 }
