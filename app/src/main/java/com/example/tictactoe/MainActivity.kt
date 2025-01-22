@@ -50,5 +50,19 @@ class MainActivity : AppCompatActivity() {
             arrayOf(position3, position5, position7)
         )
 
+        fun resetGame(view: View) {
+            gameBoard = Array(3) { Array(3) { "" } }
+            currentPlayer = "X"
+            val currentPlayerText: TextView = findViewById(R.id.currentPlayerTextView)
+            currentPlayerText.text = "Player X turn"
+
+            // Clear the buttons and enable them
+            for (i in 0..2) {
+                for (j in 0..2) {
+                    grid[i][j].text = ""
+                    grid[i][j].isEnabled = true
+                }
+            }
+        }
     }
 }
