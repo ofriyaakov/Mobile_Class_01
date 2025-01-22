@@ -29,17 +29,6 @@ class MainActivity : AppCompatActivity() {
         arrayOf(position7, position8, position9)
     )
 
-    val winPositions: Array<Array<Button>> = arrayOf(
-        arrayOf(position1, position2, position3),
-        arrayOf(position4, position5, position6),
-        arrayOf(position7, position8, position9),
-        arrayOf(position1, position4, position7),
-        arrayOf(position2, position5, position8),
-        arrayOf(position3, position6, position9),
-        arrayOf(position1, position5, position9),
-        arrayOf(position3, position5, position7)
-    )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
