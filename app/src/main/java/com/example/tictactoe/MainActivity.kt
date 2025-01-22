@@ -29,17 +29,6 @@ class MainActivity : AppCompatActivity() {
         arrayOf(position7, position8, position9)
     )
 
-    val winPositions: Array<Array<Button>> = arrayOf(
-        arrayOf(position1, position2, position3),
-        arrayOf(position4, position5, position6),
-        arrayOf(position7, position8, position9),
-        arrayOf(position1, position4, position7),
-        arrayOf(position2, position5, position8),
-        arrayOf(position3, position6, position9),
-        arrayOf(position1, position5, position9),
-        arrayOf(position3, position5, position7)
-    )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -64,4 +53,28 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun checkWin(): String {
+
+        if (gameBoard[0][0] == gameBoard[1][1] && gameBoard[0][0] == gameBoard[2][2]
+            && gameBoard[0][0] !== ""
+        ) return gameBoard[0][0]
+        if (gameBoard[0][2] == gameBoard[1][1] && gameBoard[0][2] == gameBoard[2][0]
+            && gameBoard[0][2] !== ""
+        ) return gameBoard[0][2]
+
+
+        for (i in 0..2) {
+            if (gameBoard[i][0] == gameBoard[i][1] && gameBoard[i][0] == gameBoard[i][2]
+                && gameBoard[i][0] !== ""
+            ) return gameBoard[i][0]
+            if (gameBoard[0][i] == gameBoard[1][i] && gameBoard[0][i] == gameBoard[2][i]
+                && gameBoard[0][i] !== ""
+            ) return gameBoard[0][i]
+        }
+
+        return ""
+    }
+
+
 }
