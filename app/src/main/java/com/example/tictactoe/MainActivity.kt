@@ -50,8 +50,34 @@ class MainActivity : AppCompatActivity() {
             for (j in 0..2) {
                 grid[i][j].text = ""
                 grid[i][j].isEnabled = true
+                grid[i][j].setOnClickListener{
+                    makeMove(grid[i][j])
+                }
             }
         }
+    }
+
+    private fun makeMove(cell: Button){
+        cell.text = currentPlayer
+        cell.isEnabled = false
+        val winner = checkWin()
+
+        if (winner == "") {
+            val isTie = checkTie()
+        }
+
+
+        //TODO: change player
+    }
+
+    private fun checkTie(): Boolean {
+        for (i in 0..2){
+            for (j in 0..2) {
+                if (gameBoard[i][j] == "") return false
+            }
+        }
+
+        return true
     }
 
     private fun checkWin(): String {
