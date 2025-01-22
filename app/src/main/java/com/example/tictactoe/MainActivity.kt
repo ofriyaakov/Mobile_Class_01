@@ -2,33 +2,29 @@ package com.example.tictactoe
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import android.view.View
-import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
     var currentPlayer = "X"
-    var gameBoard = Array(3) { Array(3) { "" } }
-    val winMessage: TextView = findViewById(R.id.winMessage)
+    var winMessage: TextView? = null
+    var currentPlayerText: TextView? = null
+    var endGame: Boolean = false
 
-    val position1: Button = findViewById(R.id.button00)
-    val position2: Button = findViewById(R.id.button01)
-    val position3: Button = findViewById(R.id.button02)
-    val position4: Button = findViewById(R.id.button10)
-    val position5: Button = findViewById(R.id.button11)
-    val position6: Button = findViewById(R.id.button12)
-    val position7: Button = findViewById(R.id.button20)
-    val position8: Button = findViewById(R.id.button21)
-    val position9: Button = findViewById(R.id.button22)
+    var position1: Button? = null
+    var position2: Button? = null
+    var position3: Button? = null
+    var position4: Button? = null
+    var position5: Button? = null
+    var position6: Button? = null
+    var position7: Button? = null
+    var position8: Button? = null
+    var position9: Button? = null
 
-    val grid: Array<Array<Button>> = arrayOf(
-        arrayOf(position1, position2, position3),
-        arrayOf(position4, position5, position6),
-        arrayOf(position7, position8, position9)
-    )
+    var grid: Array<Array<Button?>>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,42 +35,76 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        position1 = findViewById(R.id.button00)
+        position2 = findViewById(R.id.button01)
+        position3 = findViewById(R.id.button02)
+        position4 = findViewById(R.id.button10)
+        position5 = findViewById(R.id.button11)
+        position6 = findViewById(R.id.button12)
+        position7 = findViewById(R.id.button20)
+        position8 = findViewById(R.id.button21)
+        position9 = findViewById(R.id.button22)
+
+        winMessage = findViewById(R.id.winMessage)
+        currentPlayerText = findViewById(R.id.currentPlayerTextView)
+
+        grid = arrayOf(
+            arrayOf(position1, position2, position3),
+            arrayOf(position4, position5, position6),
+            arrayOf(position7, position8, position9)
+        )
+
+        disableAllCells()
+
+        val newGameButton: Button = findViewById(R.id.newGameButton)
+
+        newGameButton.setOnClickListener {
+            resetGame()
+        }
+
     }
 
-    private fun resetGame(view: View) {
-        gameBoard = Array(3) { Array(3) { "" } }
+    private fun resetGame() {
         currentPlayer = "X"
-        val currentPlayerText: TextView = findViewById(R.id.currentPlayerTextView)
-        currentPlayerText.text = "Player X turn"
+        currentPlayerText?.text = "Player X turn"
 
         for (i in 0..2) {
             for (j in 0..2) {
-                grid[i][j].text = ""
-                grid[i][j].isEnabled = true
-                grid[i][j].setOnClickListener{
-                    makeMove(grid[i][j])
+                grid!![i][j]?.text = ""
+                grid!![i][j]?.isEnabled = true
+                grid!![i][j]?.setOnClickListener {
+                    makeMove(grid!![i][j])
                 }
             }
         }
     }
 
-    private fun makeMove(cell: Button){
-        cell.text = currentPlayer
-        cell.isEnabled = false
+    private fun makeMove(cell: Button?){
+        cell?.text = currentPlayer
+        cell?.isEnabled = false
         val winner = checkWin()
 
         if (winner == "") {
             val isTie = checkTie()
-        }
+            if (isTie) {
+                winMessage?.text = "It's a tie!"
+                endGame = true
+            }
+        } else if (winner == "X" || winner == "O"){
+            disableAllCells()
+            winMessage(winner)
+            endGame = true
+        } else endGame = false
 
-
-        //TODO: change player
+        currentPlayer = if (currentPlayer == "X") "O" else "X"
+        currentPlayerText?.text = "Player $currentPlayer's turn"
     }
 
     private fun checkTie(): Boolean {
         for (i in 0..2){
             for (j in 0..2) {
-                if (gameBoard[i][j] == "") return false
+                if (grid!![i][j]?.text.toString() == "") return false
             }
         }
 
@@ -82,31 +112,36 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkWin(): String {
-
-        if (gameBoard[0][0] == gameBoard[1][1] && gameBoard[0][0] == gameBoard[2][2]
-            && gameBoard[0][0] !== ""
-        ) return gameBoard[0][0]
-        if (gameBoard[0][2] == gameBoard[1][1] && gameBoard[0][2] == gameBoard[2][0]
-            && gameBoard[0][2] !== ""
-        ) return gameBoard[0][2]
+        if (grid!![0][0]?.text == grid!![1][1]?.text && grid!![0][0]?.text == grid!![2][2]?.text
+            && grid!![0][0]?.text !== ""
+        ) return grid!![0][0]?.text.toString()
+        if (grid!![0][2]?.text == grid!![1][1]?.text && grid!![0][2]?.text == grid!![2][0]?.text
+            && grid!![0][2]?.text !== ""
+        ) return grid!![0][2]?.text.toString()
 
 
         for (i in 0..2) {
-            if (gameBoard[i][0] == gameBoard[i][1] && gameBoard[i][0] == gameBoard[i][2]
-                && gameBoard[i][0] !== ""
-            ) return gameBoard[i][0]
-            if (gameBoard[0][i] == gameBoard[1][i] && gameBoard[0][i] == gameBoard[2][i]
-                && gameBoard[0][i] !== ""
-            ) return gameBoard[0][i]
+            if (grid!![i][0]?.text == grid!![i][1]?.text && grid!![i][0]?.text == grid!![i][2]?.text
+                && grid!![i][0]?.text !== ""
+            ) return grid!![i][0]?.text.toString()
+            if (grid!![0][i]?.text == grid!![1][i]?.text && grid!![0][i]?.text == grid!![2][i]?.text
+                && grid!![0][i]?.text !== ""
+            ) return grid!![0][i]?.text.toString()
         }
 
         return ""
     }
 
     private fun winMessage(winChar: String) {
-        if (winChar === "X") winMessage.text = "Player X win!"
-        else if (winChar === "O") winMessage.text = "Player O win!"
-        else winMessage.text = "It's a tie!"
+        if (winChar === "X") winMessage?.text = "Player X win!"
+        else winMessage?.text = "Player O win!"
     }
 
+    private fun disableAllCells() {
+        for (i in 0..2) {
+            for (j in 0..2) {
+                grid!![i][j]?.isEnabled = false
+            }
+        }
+    }
 }
